@@ -1,0 +1,23 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Build project
+      run: |
+        cmake -G Ninja -D CMAKE_BUILD_TYPE=Release -S . -B build/Release
+        cmake --build build/Release
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: 2dxcamhook
+        path: build/Release/2dxcamhook.*.dll
